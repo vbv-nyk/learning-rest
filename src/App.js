@@ -1,25 +1,23 @@
-import logo from './logo.svg';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import './App.css';
+import { Form } from './Form';
+import { Homepage } from './Homepage';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+    const [notes, setNotes] = useState([]);
+    const notesProps = { notes, setNotes };
+    useEffect(() => {
+        axios
+            .get("http://localhost:3001/notes")
+            .then((response) => {
+                const notesData = response.data;
+                setNotes(notes.concat(notesData));
+            });
+    }, []);
+    return (<>
+        <Homepage {...notesProps} />
+        <Form {...notesProps} />
+    </>)
 }
-
 export default App;
